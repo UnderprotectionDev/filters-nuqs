@@ -1,3 +1,6 @@
+"use client";
+
+import { parseAsInteger, useQueryState } from "nuqs";
 import { Input } from "./ui/input";
 import {
   Select,
@@ -8,13 +11,29 @@ import {
 } from "@/components/ui/select";
 
 export function ProductsFilter() {
+  const [search, setSearch] = useQueryState("search", {
+    defaultValue: "",
+  });
+  const [perPage, setPerPage] = useQueryState(
+    "perPage",
+    parseAsInteger.withDefault(10)
+  );
+
   return (
     <div className="flex gap-2 justify-between">
       <div>
-        <Input placeholder="Search" className="w-full" />
+        <Input
+          placeholder="Search"
+          className="w-full"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
       <div>
-        <Select>
+        <Select
+          value={perPage.toString()}
+          onValueChange={(value) => setPerPage(parseInt(value))}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Per Page" />
           </SelectTrigger>
