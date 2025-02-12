@@ -1,6 +1,7 @@
 "use client";
 
 import { parseAsInteger, useQueryState } from "nuqs";
+
 import { Input } from "./ui/input";
 import {
   Select,
@@ -10,7 +11,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function ProductsFilter() {
+interface ProductsFilterProps {
+  refetchProducts: () => Promise<void>;
+}
+
+export default function ProductsFilter({
+  refetchProducts,
+}: ProductsFilterProps) {
   const [search, setSearch] = useQueryState("search", {
     defaultValue: "",
   });
@@ -19,22 +26,37 @@ export function ProductsFilter() {
     parseAsInteger.withDefault(10)
   );
 
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setTimeout(() => {
+      refetchProducts();
+    }, 300);
+  };
+
+  const handlePerPageChange = (value: string) => {
+    setPerPage(Number(value));
+    setTimeout(() => {
+      refetchProducts();
+    }, 300);
+  };
+
   return (
-    <div className="flex gap-2 justify-between">
+    <div className="flex justify-between gap-3">
       <div>
         <Input
           placeholder="Search"
           className="w-full"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
         />
       </div>
+
       <div>
         <Select
           value={perPage.toString()}
-          onValueChange={(value) => setPerPage(parseInt(value))}
+          onValueChange={(value) => handlePerPageChange(value)}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-20">
             <SelectValue placeholder="Per Page" />
           </SelectTrigger>
           <SelectContent>
