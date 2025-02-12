@@ -1,12 +1,6 @@
+import ProductCard from "@/components/product-card";
 import { Product } from "@/components/shared/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { getProducts } from "@/server/products";
 
 export default async function Home() {
@@ -18,18 +12,7 @@ export default async function Home() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product: Product) => (
-          <Card key={product.id}>
-            <CardHeader>
-              <CardTitle>{product.title}</CardTitle>
-              <CardDescription>{product.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </main>
